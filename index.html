@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Weather App</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #e3f2fd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            background: #fff;
+            padding: 25px;
+            width: 350px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 95%;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            background: #1976d2;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1565c0;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+<body>
+    
+    <div class="box">
+        <h2>Weather Checker</h2>
+
+        <input type="text" id="locationInput" placeholder="Enter city name ..." />
+
+        <button onclick="getWeather()">Check Weather</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function getWeather() {
+            const place = document.getElementById("locationInput").value;
+
+            if(place.trim() === "") {
+                document.getElementById("result").innerText = "Please enter a location!";
+                return;
+            }
+
+            const url = `http://api.weatherapi.com/v1/current.json?key=f7d87c0566bc4227a85160851251511&q=${place}&aqi=yes`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if(data.error){
+                    document.getElementById("result").innerText = "Location not found!";
+                    return;
+                }
+
+                const temp = data.current.temp_c;
+                document.getElementById("result").innerText = 
+                    `Temperature in ${place}: ${temp}°C`;
+
+            } catch (error) {
+                document.getElementById("result").innerText = "Error fetching data.";
+            }
+        }
+    </script>
+
+</body>
+</html>
